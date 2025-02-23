@@ -40,14 +40,20 @@ alert udp any any -> any 53 (msg:"BLOCK YouTube DNS"; content:"youtube.com"; noc
 # ===================================
 
 ## 🔹 Block TikTok and related domains via TLS SNI (HTTPS)
-alert tls any any -> any any (msg:"BLOCK TikTok"; tls.sni; content:"tiktok.com"; nocase; sid:3000001; rev:1;)
-alert tls any any -> any any (msg:"BLOCK TikTok CDN"; tls.sni; content:"tiktokcdn.com"; nocase; sid:3000002; rev:1;)
+alert tls any any -> any any (msg:"BLOCK TikTok"; tls.sni; content:"tiktok.com"; nocase; sid:3000001; rev:2;)
+alert tls any any -> any any (msg:"BLOCK TikTok CDN"; tls.sni; content:"tiktokcdn.com"; nocase; sid:3000002; rev:2;)
+alert tls any any -> any any (msg:"BLOCK TikTok Live"; tls.sni; content:"tiktokv.com"; nocase; sid:3000003; rev:1;)
+alert tls any any -> any any (msg:"BLOCK TikTok Live Push"; tls.sni; content:"tiktokv.live"; nocase; sid:3000004; rev:1;)
+alert tls any any -> any any (msg:"BLOCK TikTok Live Streaming"; tls.sni; content:"tiktoklive.com"; nocase; sid:3000005; rev:1;)
 
 ## 🔹 Block TikTok IP ranges (ByteDance-owned AS396986, AS24134)
-drop ip any any -> [104.73.0.0/16, 104.74.0.0/16, 129.226.0.0/16, 152.195.0.0/16, 161.117.0.0/16, 183.61.0.0/16, 203.205.0.0/16] (msg:"DROP TikTok IP"; sid:3000005; rev:1;)
+drop ip any any -> [104.73.0.0/16, 104.74.0.0/16, 129.226.0.0/16, 152.195.0.0/16, 161.117.0.0/16, 183.61.0.0/16, 203.205.0.0/16] (msg:"DROP TikTok IP"; sid:3000006; rev:2;)
 
 ## 🔹 Block TikTok at the DNS level (UDP Port 53)
-alert udp any any -> any 53 (msg:"BLOCK TikTok DNS"; content:"tiktok.com"; nocase; sid:3000006; rev:1;)
+alert udp any any -> any 53 (msg:"BLOCK TikTok DNS"; content:"tiktok.com"; nocase; sid:3000007; rev:2;)
+alert udp any any -> any 53 (msg:"BLOCK TikTok Live DNS"; content:"tiktoklive.com"; nocase; sid:3000008; rev:1;)
+alert udp any any -> any 53 (msg:"BLOCK TikTok Live Video"; content:"tiktokv.com"; nocase; sid:3000009; rev:1;)
+
 
 # =====================================
 # 📌 BLOCK SNAPCHAT, LIKEE & RELATED APPS
