@@ -1,0 +1,80 @@
+# ======================================================
+# 📌 WHITELIST GOOGLE SERVICES (Drive, Docs, Gmail, Workspace, etc.)
+# ======================================================
+
+## 🔹 Allow Google services via TLS SNI (HTTPS)
+pass tls any any -> any any (msg:"ALLOW Google Drive"; tls.sni; content:"drive.google.com"; nocase; sid:6000001; rev:1;)
+pass tls any any -> any any (msg:"ALLOW Google Docs"; tls.sni; content:"docs.google.com"; nocase; sid:6000002; rev:1;)
+pass tls any any -> any any (msg:"ALLOW Gmail"; tls.sni; content:"mail.google.com"; nocase; sid:6000003; rev:1;)
+pass tls any any -> any any (msg:"ALLOW Google Services"; tls.sni; content:"google.com"; nocase; sid:6000004; rev:1;)
+pass tls any any -> any any (msg:"ALLOW Google API"; tls.sni; content:"googleapis.com"; nocase; sid:6000005; rev:1;)
+pass tls any any -> any any (msg:"ALLOW Google Static Content"; tls.sni; content:"gstatic.com"; nocase; sid:6000006; rev:1;)
+pass tls any any -> any any (msg:"ALLOW Google Workspace"; tls.sni; content:"workspace.google.com"; nocase; sid:6000011; rev:1;)
+
+## 🔹 Allow Google Services at the DNS level (UDP Port 53)
+pass udp any any -> any 53 (msg:"ALLOW Google Drive DNS"; content:"drive.google.com"; nocase; sid:6000007; rev:1;)
+pass udp any any -> any 53 (msg:"ALLOW Google Docs DNS"; content:"docs.google.com"; nocase; sid:6000008; rev:1;)
+pass udp any any -> any 53 (msg:"ALLOW Gmail DNS"; content:"mail.google.com"; nocase; sid:6000009; rev:1;)
+pass udp any any -> any 53 (msg:"ALLOW Google DNS"; content:"google.com"; nocase; sid:6000010; rev:1;)
+pass udp any any -> any 53 (msg:"ALLOW Google Workspace DNS"; content:"workspace.google.com"; nocase; sid:6000012; rev:1;)
+
+# ======================================================
+# 📌 BLOCK FACEBOOK, INSTAGRAM, MESSENGER
+# ======================================================
+
+## 🔹 Block Facebook and related domains via TLS SNI (HTTPS)
+alert tls any any -> any any (msg:"BLOCK Facebook"; tls.sni; content:"facebook.com"; nocase; sid:1000001; rev:3;)
+alert tls any any -> any any (msg:"BLOCK Facebook CDN"; tls.sni; content:"fbcdn.net"; nocase; sid:1000002; rev:3;)
+alert tls any any -> any any (msg:"BLOCK Facebook Short URL"; tls.sni; content:"fb.com"; nocase; sid:1000003; rev:3;)
+alert tls any any -> any any (msg:"BLOCK Messenger"; tls.sni; content:"messenger.com"; nocase; sid:1000004; rev:3;)
+alert tls any any -> any any (msg:"BLOCK Instagram"; tls.sni; content:"instagram.com"; nocase; sid:1000007; rev:3;)
+
+## 🔹 Block Facebook and related services via IP addresses (AS32934)
+drop ip any any -> [31.13.24.0/21, 66.220.144.0/20, 69.63.176.0/20, 69.171.224.0/19, 74.119.76.0/22, 103.4.96.0/22, 129.134.0.0/16, 157.240.0.0/16, 173.252.64.0/18, 185.60.216.0/22] (msg:"DROP Facebook IP"; sid:1000008; rev:2;)
+
+## 🔹 Block Facebook at the DNS level (UDP Port 53)
+alert udp any any -> any 53 (msg:"BLOCK Facebook DNS"; content:"facebook.com"; nocase; sid:1000009; rev:1;)
+alert udp any any -> any 53 (msg:"BLOCK Messenger"; content:"messenger.com"; nocase; sid:1000011; rev:1;)
+alert udp any any -> any 53 (msg:"BLOCK Instagram"; content:"instagram.com"; nocase; sid:1000012; rev:1;)
+
+# =================================
+# 📌 BLOCK YOUTUBE & RELATED SERVICES
+# =================================
+
+## 🔹 Block YouTube and related domains via TLS SNI (HTTPS)
+alert tls any any -> any any (msg:"BLOCK YouTube"; tls.sni; content:"youtube.com"; nocase; sid:2000001; rev:1;)
+alert tls any any -> any any (msg:"BLOCK YouTube CDN"; tls.sni; content:"googlevideo.com"; nocase; sid:2000002; rev:1;)
+alert tls any any -> any any (msg:"BLOCK YouTube Static Content"; tls.sni; content:"ytimg.com"; nocase; sid:2000004; rev:1;)
+
+## 🔹 Block YouTube at the DNS level (UDP Port 53)
+alert udp any any -> any 53 (msg:"BLOCK YouTube DNS"; content:"youtube.com"; nocase; sid:2000007; rev:1;)
+
+# ===================================
+# 📌 BLOCK TIKTOK & RELATED SERVICES (INCLUDING TIKTOK LIVE)
+# ===================================
+
+## 🔹 Block TikTok and related domains via TLS SNI (HTTPS)
+alert tls any any -> any any (msg:"BLOCK TikTok"; tls.sni; content:"tiktok.com"; nocase; sid:3000001; rev:3;)
+alert tls any any -> any any (msg:"BLOCK TikTok CDN"; tls.sni; content:"tiktokcdn.com"; nocase; sid:3000002; rev:3;)
+alert tls any any -> any any (msg:"BLOCK TikTok Static"; tls.sni; content:"tiktokv.com"; nocase; sid:3000003; rev:3;)
+alert tls any any -> any any (msg:"BLOCK TikTok API"; tls.sni; content:"tiktokapi.com"; nocase; sid:3000004; rev:3;)
+alert tls any any -> any any (msg:"BLOCK TikTok Live"; tls.sni; content:"tiktoklive.com"; nocase; sid:3000005; rev:1;)
+
+## 🔹 Block TikTok IP ranges (ByteDance-owned AS396986, AS24134)
+drop ip any any -> [104.73.0.0/16, 104.74.0.0/16, 129.226.0.0/16, 152.195.0.0/16, 161.117.0.0/16, 183.61.0.0/16, 203.205.0.0/16] (msg:"DROP TikTok IP"; sid:3000006; rev:2;)
+
+## 🔹 Block TikTok at the DNS level (UDP Port 53)
+alert udp any any -> any 53 (msg:"BLOCK TikTok DNS"; content:"tiktok.com"; nocase; sid:3000007; rev:2;)
+alert udp any any -> any 53 (msg:"BLOCK TikTok Live DNS"; content:"tiktoklive.com"; nocase; sid:3000008; rev:1;)
+
+# =======================================
+# 📌 BLOCK SNAPCHAT, LIKEE & RELATED APPS
+# =======================================
+
+## 🔹 Block Snapchat and related domains via TLS SNI (HTTPS)
+alert tls any any -> any any (msg:"BLOCK Snapchat"; tls.sni; content:"snapchat.com"; nocase; sid:4000001; rev:3;)
+
+# ======================================
+# 📌 BLOCK DoH (DNS-over-HTTPS) TO PREVENT BYPASSING
+# ======================================
+drop ip any any -> [1.1.1.1, 1.0.0.1, 8.8.8.8, 8.8.4.4, 9.9.9.9, 94.140.14.14, 208.67.222.222, 208.67.220.220] (msg:"DROP Public DoH"; sid:5000001; rev:1;)
